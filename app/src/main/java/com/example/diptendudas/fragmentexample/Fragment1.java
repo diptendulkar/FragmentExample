@@ -2,13 +2,18 @@ package com.example.diptendudas.fragmentexample;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class Fragment1 extends Fragment {
+import java.util.ArrayList;
+
+public class Fragment1 extends Fragment implements MyRecyclerViewAdapter.ItemClickListener {
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -16,6 +21,7 @@ public class Fragment1 extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
     TextView textView;
     static int counter =0;
+    MyRecyclerViewAdapter adapter;
     public Fragment1() {
     }
 
@@ -46,6 +52,30 @@ public class Fragment1 extends Fragment {
                 textView.setText("Button Pressed in Fragment 1: " + counter);
             }
         });
+
+
+        //recycler view
+
+        // data to populate the RecyclerView with
+        ArrayList<String> animalNames = new ArrayList<>();
+        animalNames.add("Horse");
+        animalNames.add("Cow");
+        animalNames.add("Camel");
+        animalNames.add("Sheep");
+        animalNames.add("Goat");
+
+        // set up the RecyclerView
+        RecyclerView recyclerView = rootView.findViewById(R.id.rvAnimals);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new MyRecyclerViewAdapter(getContext(), animalNames);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
+
         return rootView;
+    }
+    @Override
+    public void onItemClick(View view, int position) {
+        Toast.makeText(getContext(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+        textView.setText("Button Pressed in Fragment 1: " + adapter.getItem(position));
     }
 }
