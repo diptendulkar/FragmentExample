@@ -11,6 +11,7 @@ public class Utility {
 
     public static void addShortcutToHomeScreen(Context context)
     {
+        //suman writing a comment
         Intent intent1 = new Intent(context, MainActivity.class);
         intent1.setAction(Intent.ACTION_VIEW);
 
