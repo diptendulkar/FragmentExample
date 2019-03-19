@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class Fragment2 extends Fragment {
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+    public static String TAG = "Fragment2";
     TextView textView;
     static int Fragment2counter =0;
     ArrayList<Contact> listContacts;
@@ -43,6 +45,7 @@ public class Fragment2 extends Fragment {
      * number.
      */
     public static Fragment2 newInstance(int sectionNumber) {
+        Log.i(TAG, "test");
         Fragment2 fragment = new Fragment2();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -66,7 +69,7 @@ public class Fragment2 extends Fragment {
             }
         });*/
 
-
+        Log.i(TAG, "test");
         lvContacts = (ListView) rootView.findViewById(R.id.lvContacts);
         showContacts();
         return rootView;
@@ -83,6 +86,7 @@ public class Fragment2 extends Fragment {
             listContacts = new ArrayList<>();
             ReadContact readContact = new ReadContact(contactFetcher);
             readContact.execute();
+            Log.i(TAG, "listContacts size 1: " + listContacts.size());
 
 
             adapterContacts = new ContactsAdapter(getContext(), listContacts);
@@ -100,6 +104,7 @@ public class Fragment2 extends Fragment {
                 Toast.makeText(getContext(), "Until you grant the permission, we cannot display the names", Toast.LENGTH_SHORT).show();
             }
         }
+        Log.i(TAG, "listContacts size: ");
     }
 
     public class ReadContact extends AsyncTask<Void, Void, Boolean> {
@@ -112,12 +117,14 @@ public class Fragment2 extends Fragment {
         protected Boolean doInBackground(Void... voids) {
             Looper.prepare();
             listContacts = mContactFetcher.fetchAll();
+            Log.i(TAG, "listContacts size: " + listContacts.size());
             return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
+                Log.i(TAG, "listContacts size: " + listContacts.size());
                 adapterContacts.addAll(listContacts);
                 adapterContacts.notifyDataSetChanged();
             }
