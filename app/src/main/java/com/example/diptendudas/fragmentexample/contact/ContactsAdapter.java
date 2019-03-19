@@ -13,8 +13,10 @@ import com.example.diptendudas.fragmentexample.R;
 
 public class ContactsAdapter extends ArrayAdapter<Contact> {
 
+	private ArrayList<Contact> mContacts;
 	public ContactsAdapter(Context context, ArrayList<Contact> contacts) {
 		super(context, 0, contacts);
+        mContacts = contacts;
 	}
 
 	@Override

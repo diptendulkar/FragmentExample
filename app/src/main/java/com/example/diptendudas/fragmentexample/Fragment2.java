@@ -2,8 +2,10 @@ package com.example.diptendudas.fragmentexample;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ public class Fragment2 extends Fragment {
     static int Fragment2counter =0;
     ArrayList<Contact> listContacts;
     ListView lvContacts;
+    ContactsAdapter adapterContacts;
     // Request code for READ_CONTACTS. It can be any number > 0.
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     public Fragment2() {
@@ -76,9 +79,13 @@ public class Fragment2 extends Fragment {
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
         } else {
             // Android version is lesser than 6.0 or the permission is already granted.
-            listContacts = new ContactFetcher(getContext()).fetchAll();
+            ContactFetcher contactFetcher = new ContactFetcher(getContext());
+            listContacts = new ArrayList<>();
+            ReadContact readContact = new ReadContact(contactFetcher);
+            readContact.execute();
 
-            ContactsAdapter adapterContacts = new ContactsAdapter(getContext(), listContacts);
+
+            adapterContacts = new ContactsAdapter(getContext(), listContacts);
             lvContacts.setAdapter(adapterContacts);
         }
 
@@ -94,4 +101,38 @@ public class Fragment2 extends Fragment {
             }
         }
     }
+
+    public class ReadContact extends AsyncTask<Void, Void, Boolean> {
+
+        ContactFetcher mContactFetcher;
+        public ReadContact(ContactFetcher contactFetcher) {
+            mContactFetcher = contactFetcher;
+        }
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            Looper.prepare();
+            listContacts = mContactFetcher.fetchAll();
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success) {
+                adapterContacts.addAll(listContacts);
+                adapterContacts.notifyDataSetChanged();
+            }
+            //mContactListener.contactComplete(success);
+        }
+
+        @Override
+        protected void onCancelled() {
+            //mContactListener.contactCancelled();
+        }
+    }
+
+
+    /*public interface contactListener {
+        void contactComplete(final Boolean success);
+        void contactCancelled();
+    }*/
 }
