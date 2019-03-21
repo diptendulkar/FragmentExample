@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-      Utility.addShortcutToHomeScreen(this);
+    //  Utility.addShortcutToHomeScreen(this);
 
 
     }

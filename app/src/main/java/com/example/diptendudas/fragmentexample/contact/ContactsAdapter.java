@@ -1,48 +1,57 @@
 package com.example.diptendudas.fragmentexample.contact;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.example.diptendudas.fragmentexample.R;
 
-public class ContactsAdapter extends ArrayAdapter<Contact> {
+public class ContactsAdapter extends SimpleCursorAdapter {
 
-	private ArrayList<Contact> mContacts;
-	public ContactsAdapter(Context context, ArrayList<Contact> contacts) {
-		super(context, 0, contacts);
-        mContacts = contacts;
+
+	public ContactsAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
+		super(context, layout, c, from, to, flags);
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		// Get the data item
-		Contact contact = getItem(position);
-		// Check if an existing view is being reused, otherwise inflate the view
-		View view = convertView;
-		if (view == null) {
-			LayoutInflater inflater = LayoutInflater.from(getContext());
-			view = inflater.inflate(R.layout.contacts_list_item, parent, false);
-		}
-		// Populate the data into the template view using the data object
-		TextView tvName = (TextView) view.findViewById(R.id.tvName);
-		TextView tvEmail = (TextView) view.findViewById(R.id.tvEmail);
-		TextView tvPhone = (TextView) view.findViewById(R.id.tvPhone);
-		tvName.setText(contact.name);
-		tvEmail.setText("");
-		tvPhone.setText("");
-		if (contact.emails.size() > 0 && contact.emails.get(0) != null) {
-			tvEmail.setText(contact.emails.get(0).address);
-		}
-		if (contact.numbers.size() > 0 && contact.numbers.get(0) != null) {
-			tvPhone.setText(contact.numbers.get(0).number);
-		}
-		return view;
-	}
+	public void bindView(View view, Context context, Cursor cursor) {
+		ImageView contactImageView = (ImageView) view.findViewById(R.id.contact_image_IV);
+		TextView contactTextView = (TextView) view.findViewById(R.id.contact_name_TV);
+		TextView phoneNumberTextView = (TextView) view.findViewById(R.id.contact_phone_TV);
 
+		String contactName = cursor.getString(cursor.getColumnIndex(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
+				ContactsContract.Contacts.DISPLAY_NAME_PRIMARY :
+				ContactsContract.Contacts.DISPLAY_NAME));
+		String imageUriStr = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
+		//String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+		InputStream inputStream = null;
+
+		if (imageUriStr != null) {
+			try {
+				inputStream = context.getContentResolver().openInputStream(Uri.parse(imageUriStr));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			contactImageView.setImageDrawable(Drawable.createFromStream(inputStream, imageUriStr));
+		}else{
+			contactImageView.setImageResource(R.drawable.contactplacholder);
+
+		}
+		contactTextView.setText(contactName);
+	//	phoneNumberTextView.setText(phoneNumber);
+	}
 }

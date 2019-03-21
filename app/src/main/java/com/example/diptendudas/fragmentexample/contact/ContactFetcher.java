@@ -9,6 +9,7 @@ import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.support.annotation.Nullable;
 import android.support.v4.content.CursorLoader;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,7 +63,7 @@ public class ContactFetcher {
 
         matchContactNumbers(contactsMap);
         matchContactEmails(contactsMap);
-
+        Log.i("Fragment2", "fetchAll()-.>:  listContacts size" + listContacts.size());
         return listContacts;
     }
 
