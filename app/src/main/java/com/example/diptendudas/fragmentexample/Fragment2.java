@@ -23,8 +23,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.diptendudas.fragmentexample.contact.Contact;
-
 import com.example.diptendudas.fragmentexample.contact.ContactsAdapter;
 
 import java.util.ArrayList;
@@ -47,11 +45,11 @@ public class Fragment2 extends Fragment implements LoaderManager.LoaderCallbacks
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
     public static String TAG = "Fragment2";
-    TextView textView;
+
     static int Fragment2counter = 0;
-    ArrayList<Contact> listContacts;
+
     ListView lvContacts;
-    ContactsAdapter adapterContacts;
+
     // Request code for READ_CONTACTS. It can be any number > 0.
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
 
