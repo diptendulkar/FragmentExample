@@ -21,10 +21,12 @@ import android.widget.TextView;
 import com.example.diptendudas.fragmentexample.R;
 
 public class ContactsAdapter extends SimpleCursorAdapter {
+	private static final int CONTACT_ID_INDEX = 0;
 
-
+	Context mContext;
 	public ContactsAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
 		super(context, layout, c, from, to, flags);
+		mContext = context;
 	}
 
 	@Override
@@ -37,7 +39,7 @@ public class ContactsAdapter extends SimpleCursorAdapter {
 				ContactsContract.Contacts.DISPLAY_NAME_PRIMARY :
 				ContactsContract.Contacts.DISPLAY_NAME));
 		String imageUriStr = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
-		//String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+		// String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
 		InputStream inputStream = null;
 
 		if (imageUriStr != null) {
@@ -52,6 +54,64 @@ public class ContactsAdapter extends SimpleCursorAdapter {
 
 		}
 		contactTextView.setText(contactName);
-	//	phoneNumberTextView.setText(phoneNumber);
+	 	phoneNumberTextView.setText(getContactDetails(cursor, cursor.getPosition()));
+	}
+
+	public String getContactDetails(Cursor c, int position)
+	{
+
+		StringBuilder stringBuilder = new StringBuilder();
+		// Get the Cursor
+		Cursor cursor = c;
+		// Move to the selected contact
+		cursor.moveToPosition(position);
+		// Get the _ID value
+		long mContactId = cursor.getLong(CONTACT_ID_INDEX);
+
+		//Get all phone numbers for the contact
+		Cursor phones = mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+				ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + mContactId, null, null);
+		if ((phones != null ? phones.getCount() : 0) > 0)
+
+			stringBuilder.append("Phones \n");
+
+		while (phones != null && phones.moveToNext()) {
+			String number = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+			int type = phones.getInt(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+
+			stringBuilder.append(number + " ");
+
+			switch (type) {
+				case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+					stringBuilder.append("(Home)\n");
+					break;
+				case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+					stringBuilder.append("(Mobile)\n");
+					break;
+				case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+					stringBuilder.append("(Work)\n");
+					break;
+			}
+		}
+		if (phones != null) {
+			phones.close();
+		}
+
+		//Get all emails for the contact
+		stringBuilder.append("\n");
+
+
+		Cursor emails =  mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,
+				ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = " + mContactId, null, null);
+		if ((emails != null ? emails.getCount() : 0) > 0)
+			stringBuilder.append("Emails \n");
+		while (emails != null && emails.moveToNext()) {
+			String email = emails.getString(emails.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
+			stringBuilder.append(email + " \n");
+		}
+		if (emails != null) {
+			emails.close();
+		}
+		return stringBuilder.toString();
 	}
 }
