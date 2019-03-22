@@ -26,7 +26,7 @@ import android.widget.Toast;
 import com.example.diptendudas.fragmentexample.contact.ContactsAdapter;
 
 import java.util.ArrayList;
-
+// 3rd party lib for progressbar
 import is.arontibo.library.ElasticDownloadView;
 
 
