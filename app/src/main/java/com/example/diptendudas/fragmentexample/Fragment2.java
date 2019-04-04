@@ -4,6 +4,7 @@ import android.Manifest;
 
 import android.database.Cursor;
 
+
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.content.pm.PackageManager;
