@@ -6,6 +6,7 @@ import android.graphics.drawable.Icon;
 import android.support.v4.content.pm.ShortcutInfoCompat;
 import android.support.v4.content.pm.ShortcutManagerCompat;
 import android.support.v4.graphics.drawable.IconCompat;
+import android.telephony.TelephonyManager;
 
 public class Utility {
 
@@ -23,6 +24,14 @@ public class Utility {
                 .build();
 
         boolean b = ShortcutManagerCompat.requestPinShortcut(context, pinShortcutInfo, null);
+    }
+
+    public static  String getMobileNumber(Context context)
+    {
+        TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        String mPhoneNumber = tMgr.getLine1Number();
+
+        return mPhoneNumber;
     }
 }
 
