@@ -41,7 +41,7 @@ public class Fragment3 extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        requestPermissions(new String[]{Manifest.permission.READ_PHONE_NUMBERS}, PERMISSIONS_REQUEST_READ_PHONE_STATE);
+        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSIONS_REQUEST_READ_PHONE_STATE);
           textView = (TextView) rootView.findViewById(R.id.section_label);
         textView.setText("Fragment 3 = " + getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
         Fragment3counter =0;

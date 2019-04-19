@@ -7,6 +7,7 @@ import android.support.v4.content.pm.ShortcutInfoCompat;
 import android.support.v4.content.pm.ShortcutManagerCompat;
 import android.support.v4.graphics.drawable.IconCompat;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
 
 public class Utility {
 
@@ -31,6 +32,7 @@ public class Utility {
         TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
         String mPhoneNumber = tMgr.getLine1Number();
 
+        Toast.makeText(context, "Line Number :" + tMgr.getLine1Number(), Toast.LENGTH_SHORT).show();
         return mPhoneNumber;
     }
 }
