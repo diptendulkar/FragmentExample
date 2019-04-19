@@ -33,6 +33,7 @@ public class Utility {
         String mPhoneNumber = tMgr.getLine1Number();
 
         Toast.makeText(context, "Line Number :" + tMgr.getLine1Number(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "IMEI Number :" + tMgr.getImei(), Toast.LENGTH_SHORT).show();
         return mPhoneNumber;
     }
 }
